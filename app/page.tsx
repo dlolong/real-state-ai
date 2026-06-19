@@ -1,5 +1,4 @@
 import Link from "next/link";
-import CTA from "@/components/CTA";
 
 export default function HomePage() {
   return (
@@ -143,8 +142,6 @@ export default function HomePage() {
         </p>
       </section>
 
-      {/* CTA */}
-      {/* <CTA /> */}
 
       {/* FOOTER */}
       <footer className="text-center text-gray-500 py-10 text-sm">
