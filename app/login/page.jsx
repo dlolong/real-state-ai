@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import AppLogo from "@/components/AppLogo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -35,7 +36,12 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-white flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
+        <div className="flex justify-center mb-6">
+          <AppLogo href="/" imageClassName="h-12 w-auto" />
+        </div>
+
         <h1 className="text-3xl font-bold">Welcome back</h1>
+
         <p className="text-gray-400 mt-2">
           Login to your real estate AI dashboard.
         </p>

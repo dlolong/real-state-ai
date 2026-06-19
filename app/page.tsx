@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AppLogo from "@/components/AppLogo";
 
 export default function HomePage() {
   return (
@@ -7,9 +8,7 @@ export default function HomePage() {
       {/* NAVBAR */}
      {/* NAVBAR */}
 <nav className="max-w-6xl mx-auto px-4 py-6 flex justify-between items-center">
-  <h1 className="text-xl font-bold">
-    DealAI
-  </h1>
+ <AppLogo href="/" />
 
   <div className="flex items-center gap-3">
 

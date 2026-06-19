@@ -44,119 +44,119 @@ export function AppProvider({ children }) {
     router.replace('/') // or /login
   }
 
-  const loadAppData = async (currentUser, silent = false) => {
-    if (!silent) setInitialLoading(true)
-    if (silent) setRefreshing(true)
+  // const loadAppData = async (currentUser, silent = false) => {
+  //   if (!silent) setInitialLoading(true)
+  //   if (silent) setRefreshing(true)
 
-    const publicOnlyRoutes = [
-      '/login',
-      '/signup',
-      '/forgot-password',
-      '/reset-password',
-    ]
+  //   const publicOnlyRoutes = [
+  //     '/login',
+  //     '/signup',
+  //     '/forgot-password',
+  //     '/reset-password',
+  //   ]
 
-    setUser(currentUser)
+  //   setUser(currentUser)
 
-    if (!currentUser) {
-      setInitialLoading(false)
-      setRefreshing(false)
-      return
-    }
+  //   if (!currentUser) {
+  //     setInitialLoading(false)
+  //     setRefreshing(false)
+  //     return
+  //   }
 
-    const isPublicOnlyRoute = publicOnlyRoutes.some((route) =>
-      pathname.startsWith(route)
-    )
+  //   const isPublicOnlyRoute = publicOnlyRoutes.some((route) =>
+  //     pathname.startsWith(route)
+  //   )
 
-    if (pathname === '/' || isPublicOnlyRoute) {
-      router.replace('/dashboard')
-    }
+  //   if (pathname === '/' || isPublicOnlyRoute) {
+  //     router.replace('/dashboard')
+  //   }
     
-    const { data: profileData } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', currentUser.id)
-      .maybeSingle()
+  //   const { data: profileData } = await supabase
+  //     .from('profiles')
+  //     .select('*')
+  //     .eq('id', currentUser.id)
+  //     .maybeSingle()
 
-    setProfile(profileData || null)
+  //   setProfile(profileData || null)
 
-    setInitialLoading(false)
-    setRefreshing(false)
-  }
+  //   setInitialLoading(false)
+  //   setRefreshing(false)
+  // }
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      loadAppData(data.session?.user || null)
-    })
+  // useEffect(() => {
+  //   // supabase.auth.getSession().then(({ data }) => {
+  //   //   loadAppData(data.session?.user || null)
+  //   // })
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_OUT' || !session) {
-        loadAppData(null, true)
-        setUser(null)
+  //   const {
+  //     data: { subscription },
+  //   } = supabase.auth.onAuthStateChange((event, session) => {
+  //     if (event === 'SIGNED_OUT' || !session) {
+  //       loadAppData(null, true)
+  //       setUser(null)
 
-        if (!isPublicRoute) {
-          router.replace('/')
-        }
-        return
-      }
+  //       if (!isPublicRoute) {
+  //         router.replace('/')
+  //       }
+  //       return
+  //     }
 
-      // silent refresh = no full-page loader
-      loadAppData(session.user, true)
-    })
+  //     // silent refresh = no full-page loader
+  //     loadAppData(session.user, true)
+  //   })
 
-    return () => subscription.unsubscribe()
-  }, [])
+  //   return () => subscription.unsubscribe()
+  // }, [])
 
-  useEffect(() => {
-    let isMounted = true
+  // useEffect(() => {
+  //   let isMounted = true
 
-    const clearAuthData = () => {
-      if (!isMounted) return
+  //   const clearAuthData = () => {
+  //     if (!isMounted) return
 
-      loadAppData(null, true)
-      setUser(null)
+  //     loadAppData(null, true)
+  //     setUser(null)
 
-      if (!isPublicRoute) {
-        router.replace('/')
-      }
-    }
+  //     if (!isPublicRoute) {
+  //       router.replace('/')
+  //     }
+  //   }
 
-    const initSession = async () => {
-      const { data, error } = await supabase.auth.getSession()
+  //   const initSession = async () => {
+  //     const { data, error } = await supabase.auth.getSession()
 
-      if (
-        error ||
-        !data.session ||
-        error?.message?.includes('Invalid Refresh Token') ||
-        error?.message?.includes('Refresh Token Not Found')
-      ) {
-        await supabase.auth.signOut()
-        clearAuthData()
-        return
-      }
+  //     if (
+  //       error ||
+  //       !data.session ||
+  //       error?.message?.includes('Invalid Refresh Token') ||
+  //       error?.message?.includes('Refresh Token Not Found')
+  //     ) {
+  //       await supabase.auth.signOut()
+  //       clearAuthData()
+  //       return
+  //     }
 
-      loadAppData(data.session.user || null)
-    }
+  //     loadAppData(data.session.user || null)
+  //   }
 
-    initSession()
+  //   initSession()
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_OUT' || !session) {
-        clearAuthData()
-        return
-      }
+  //   const {
+  //     data: { subscription },
+  //   } = supabase.auth.onAuthStateChange(async (event, session) => {
+  //     if (event === 'SIGNED_OUT' || !session) {
+  //       clearAuthData()
+  //       return
+  //     }
 
-      loadAppData(session.user, true)
-    })
+  //     loadAppData(session.user, true)
+  //   })
 
-    return () => {
-      isMounted = false
-      subscription.unsubscribe()
-    }
-  }, [isPublicRoute, router])
+  //   return () => {
+  //     isMounted = false
+  //     subscription.unsubscribe()
+  //   }
+  // }, [isPublicRoute, router])
 
   return (
     <AppContext.Provider
