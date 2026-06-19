@@ -30,7 +30,6 @@ const menuItems = [
     href: "/county-detector",
     icon: "🔥",
   },
-
   {
     label: "Data Sources",
     href: "/sources",
@@ -38,7 +37,7 @@ const menuItems = [
   },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ onNavigate }) {
   const pathname = usePathname();
 
   const isActive = (href) => {
@@ -50,16 +49,16 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="w-64 h-full bg-slate-900 border-r border-slate-800 flex flex-col">
+    <aside className="w-full md:w-64 h-full bg-slate-900 border-r border-slate-800 flex flex-col">
       {/* BRAND */}
-      <div className="p-6 border-b border-slate-800">
-        <AppLogo />
-        <p className="text-xs text-gray-400 mt-2">
+      <div className="p-5 md:p-6 border-b border-slate-800">
+         <AppLogo />
+        <p className="text-xs text-gray-400 mt-1">
           Real Estate OS
         </p>
       </div>
 
-      {/* NAVIGATION */}
+      {/* NAV */}
       <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
         {menuItems.map((item) => {
           const active = isActive(item.href);
@@ -68,13 +67,15 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2 rounded-xl transition ${active
-                ? "bg-white text-black font-semibold shadow-sm"
-                : "text-gray-300 hover:bg-slate-800 hover:text-white"
-                }`}
+              onClick={onNavigate}
+              className={`flex items-center gap-3 px-3 py-3 md:py-2 rounded-xl transition ${
+                active
+                  ? "bg-white text-black font-semibold shadow-sm"
+                  : "text-gray-300 hover:bg-slate-800 hover:text-white"
+              }`}
             >
-              <span>{item.icon}</span>
-              <span>{item.label}</span>
+              <span className="shrink-0">{item.icon}</span>
+              <span className="truncate">{item.label}</span>
             </Link>
           );
         })}
@@ -84,7 +85,8 @@ export default function Sidebar() {
       <div className="p-4 border-t border-slate-800">
         <Link
           href="/logout"
-          className="block w-full text-left px-3 py-2 rounded-xl hover:bg-slate-800 transition text-red-400"
+          onClick={onNavigate}
+          className="block w-full text-left px-3 py-3 md:py-2 rounded-xl hover:bg-slate-800 transition text-red-400"
         >
           ⎋ Logout
         </Link>
